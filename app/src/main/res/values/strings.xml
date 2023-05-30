@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">FetchChicago</string>
+    <string name="app_name">Fetch Chicago</string>
+    <string name="sorted_rest">Sorted/REST</string>
+    <string name="sorted_local">Sorted/Local</string>
+    <string name="unsorted">Unsorted</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
