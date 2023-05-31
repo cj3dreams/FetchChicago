@@ -8,6 +8,7 @@ class DataRepositoryImpl(
     private val remoteSource: RemoteSource
 
     ):DataRepository {
+
     override suspend fun getFetchListFromRemote(): RemoteResult<List<FetchListResponseItem>> =
         remoteSource.getFetchList()
 

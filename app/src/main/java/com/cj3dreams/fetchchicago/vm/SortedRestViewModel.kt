@@ -11,17 +11,29 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class SortedRestViewModel(private val dataRepository: DataRepositoryImpl): ViewModel() {
-    val fetchListLiveData = MutableLiveData<List<FetchListResponseItem>?>()
 
+    val fetchListLiveData = MutableLiveData<List<FetchListResponseItem>?>()
     private val getFetchListFromRemoteUseCase get() = GetFetchListFromRemoteUseCase(dataRepository)
 
-    fun getFetchListFromRemote() = viewModelScope.launch(Dispatchers.IO){
+    fun getFetchListFromRemoteAndSort() = viewModelScope.launch(Dispatchers.IO){
 
         when(val remoteResult = getFetchListFromRemoteUseCase.invoke()){
 
             is RemoteResult.Success -> {
                 val response = remoteResult.data
-                fetchListLiveData.postValue(response)
+                var sortedList = response.filter { !it.name.isNullOrBlank() }
+                sortedList = sortedList.sortedWith(object : Comparator<FetchListResponseItem> {
+                    override fun compare(o1: FetchListResponseItem, o2: FetchListResponseItem) =
+                        extractInt(o1) - extractInt(o2)
+
+                    fun extractInt(s: FetchListResponseItem): Int {
+                        val num = s.name!!.replace("\\D".toRegex(), "")
+                        return if (num.isEmpty()) 0 else Integer.parseInt(num)
+                    }
+                })
+                sortedList = sortedList.sortedBy { it.listId }
+
+                fetchListLiveData.postValue(sortedList)
             }
             is RemoteResult.Error -> fetchListLiveData.postValue(null)
         }
