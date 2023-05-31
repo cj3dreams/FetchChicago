@@ -15,7 +15,7 @@
         <ProgressBar
             android:id="@+id/progressBarLocal"
             android:layout_centerInParent="true"
-            android:indeterminateTint="@color/black"
+            android:indeterminateTint="@color/fetch_orange_dark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
@@ -85,6 +85,7 @@
         </RelativeLayout>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:visibility="gone"
             android:layout_below="@+id/listSortRlLocal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

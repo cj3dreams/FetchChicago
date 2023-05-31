@@ -51,15 +51,18 @@ class SortedLocalFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
             when {
                 it == null -> {
+                    recyclerViewLocal.visibility = View.GONE
                     progressBarLocal.visibility = View.VISIBLE
                     emptyLocalRl.visibility = View.GONE
                     Toast.makeText(requireContext(), "Something has gone wrong", Toast.LENGTH_SHORT).show()
                 }
                 it.isEmpty() -> {
+                    recyclerViewLocal.visibility = View.GONE
                     emptyLocalRl.visibility = View.VISIBLE
                     progressBarLocal.visibility = View.GONE
                 }
                 else -> {
+                    recyclerViewLocal.visibility = View.VISIBLE
                     recyclerViewLocal.adapter = FetchListAdapter(it)
                     progressBarLocal.visibility = View.GONE
                     emptyLocalRl.visibility = View.GONE
@@ -70,7 +73,6 @@ class SortedLocalFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onRefresh() {
         sortedLocalViewModel.getFetchListFromRemoteAndInsertToLocal()
-        sortedLocalViewModel.getFetchListFromLocal()
         swipeToUpdateLocal.isRefreshing = false
         Toast.makeText(requireContext(), "Updating", Toast.LENGTH_SHORT).show()
     }

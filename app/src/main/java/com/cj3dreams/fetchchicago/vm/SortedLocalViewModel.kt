@@ -27,8 +27,10 @@ class SortedLocalViewModel(private val dataRepository: DataRepositoryImpl): View
                 val response = remoteResult.data
                 insertFetchListToLocalUseCase.invoke(response)
             }
-            is RemoteResult.Error -> { //\\??? lol
-             }
+            is RemoteResult.Error -> {
+                fetchListLiveDataLocal.postValue(null)
+                getFetchListFromLocal()
+            }
         }
     }
     fun getFetchListFromLocal() = viewModelScope.launch(Dispatchers.IO) {

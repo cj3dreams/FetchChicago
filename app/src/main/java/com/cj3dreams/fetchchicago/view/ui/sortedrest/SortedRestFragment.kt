@@ -47,11 +47,13 @@ class SortedRestFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
             when {
                 it == null -> {
+                    recyclerViewRest.visibility = View.GONE
                     progressBarRest.visibility = View.VISIBLE
                     Toast.makeText(requireContext(), "Something has gone wrong", Toast.LENGTH_SHORT).show()
                 }
                 it.isEmpty() -> progressBarRest.visibility = View.VISIBLE
                 else -> {
+                    recyclerViewRest.visibility = View.VISIBLE
                     recyclerViewRest.adapter = FetchListAdapter(it)
                     progressBarRest.visibility = View.GONE
                 }

@@ -47,11 +47,13 @@ class UnsortedFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
             when {
                 it == null -> {
+                    recyclerViewUnsorted.visibility = View.GONE
                     progressBarUnsorted.visibility = View.VISIBLE
                     Toast.makeText(requireContext(), "Something has gone wrong", Toast.LENGTH_SHORT).show()
                 }
                 it.isEmpty() -> progressBarUnsorted.visibility = View.VISIBLE
                 else -> {
+                    recyclerViewUnsorted.visibility = View.VISIBLE
                     recyclerViewUnsorted.adapter = FetchListAdapter(it)
                     progressBarUnsorted.visibility = View.GONE
                 }

@@ -6,6 +6,7 @@
     <color name="fetch_orange_dark">#FBA919</color>
     <color name="fetch_orange_middle">#FFB636</color>
     <color name="fetch_orange_light">#FAD28B</color>
+    <color name="no_color">#00FFFFFF</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
