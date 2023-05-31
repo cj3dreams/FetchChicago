@@ -1,12 +1,12 @@
 package com.cj3dreams.fetchchicago.source.remote
 
-import com.cj3dreams.fetchchicago.model.response.FetchListResponseItem
+import com.cj3dreams.fetchchicago.model.FetchListModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class RemoteSourceImpl(private val api: GetFetchListApi):RemoteSource {
 
-    override suspend fun getFetchList(): RemoteResult<List<FetchListResponseItem>> =
+    override suspend fun getFetchList(): RemoteResult<List<FetchListModel>> =
         withContext(Dispatchers.IO){
             try {
                 val response = api.getFetchList()

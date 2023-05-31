@@ -6,10 +6,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.cj3dreams.fetchchicago.R
-import com.cj3dreams.fetchchicago.model.response.FetchListResponseItem
+import com.cj3dreams.fetchchicago.model.FetchListModel
 
 class FetchListAdapter(
-    private val list: List<FetchListResponseItem>
+    private val list: List<FetchListModel>
     ): RecyclerView.Adapter<FetchListAdapter.FetchListViewHolder>(){
 
     class FetchListViewHolder(view: View): RecyclerView.ViewHolder(view) {

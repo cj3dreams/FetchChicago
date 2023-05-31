@@ -1,17 +1,77 @@
 package com.cj3dreams.fetchchicago.view.ui.sortedlocal
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.RelativeLayout
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.cj3dreams.fetchchicago.R
+import com.cj3dreams.fetchchicago.view.adapter.FetchListAdapter
+import com.cj3dreams.fetchchicago.vm.SortedLocalViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SortedLocalFragment : Fragment() {
+class SortedLocalFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
+    private lateinit var swipeToUpdateLocal: SwipeRefreshLayout
+    private lateinit var progressBarLocal: ProgressBar
+    private lateinit var recyclerViewLocal: RecyclerView
+    private lateinit var emptyLocalRl: RelativeLayout
+    private val sortedLocalViewModel: SortedLocalViewModel by viewModel()
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        sortedLocalViewModel.getFetchListFromRemoteAndInsertToLocal()
+        sortedLocalViewModel.getFetchListFromLocal()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View? {
 
-        return inflater.inflate(R.layout.fragment_sorted_local, container, false)
+        val view = layoutInflater.inflate(R.layout.fragment_sorted_local, container, false)
+        swipeToUpdateLocal = view.findViewById(R.id.swipeToUpdateLocal)
+        progressBarLocal = view.findViewById(R.id.progressBarLocal)
+        emptyLocalRl = view.findViewById(R.id.emptyLocalRl)
+        recyclerViewLocal = view.findViewById(R.id.recyclerViewLocal)
+        recyclerViewLocal.layoutManager = LinearLayoutManager(requireContext())
+
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        swipeToUpdateLocal.setOnRefreshListener(this)
+        sortedLocalViewModel.fetchListLiveDataLocal.observe(viewLifecycleOwner, {
+
+            when {
+                it == null -> {
+                    progressBarLocal.visibility = View.VISIBLE
+                    emptyLocalRl.visibility = View.GONE
+                    Toast.makeText(requireContext(), "Something has gone wrong", Toast.LENGTH_SHORT).show()
+                }
+                it.isEmpty() -> {
+                    emptyLocalRl.visibility = View.VISIBLE
+                    progressBarLocal.visibility = View.GONE
+                }
+                else -> {
+                    recyclerViewLocal.adapter = FetchListAdapter(it)
+                    progressBarLocal.visibility = View.GONE
+                    emptyLocalRl.visibility = View.GONE
+                }
+            }
+        })
+    }
+
+    override fun onRefresh() {
+        sortedLocalViewModel.getFetchListFromRemoteAndInsertToLocal()
+        sortedLocalViewModel.getFetchListFromLocal()
+        swipeToUpdateLocal.isRefreshing = false
+        Toast.makeText(requireContext(), "Updating", Toast.LENGTH_SHORT).show()
     }
 }

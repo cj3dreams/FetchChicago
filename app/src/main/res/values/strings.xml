@@ -6,4 +6,5 @@
     <string name="list_id"> List ID </string>
     <string name="name"> Name  </string>
     <string name="id">  ID </string>
+    <string name="database_is_empty_yet">Database is \nempty yet</string>
 </resources>

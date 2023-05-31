@@ -8,7 +8,7 @@
     tools:context=".view.ui.sortedrest.SortedRestFragment">
 
     <RelativeLayout
-        android:padding="16dp"
+        android:paddingHorizontal="16dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

@@ -1,14 +1,20 @@
 package com.cj3dreams.fetchchicago.di
 
-import com.cj3dreams.fetchchicago.repo.DataRepository
+import android.app.Application
+import androidx.room.Room
 import com.cj3dreams.fetchchicago.repo.DataRepositoryImpl
+import com.cj3dreams.fetchchicago.source.local.AppDb
+import com.cj3dreams.fetchchicago.source.local.FetchListDao
+import com.cj3dreams.fetchchicago.source.local.LocalSourceImpl
 import com.cj3dreams.fetchchicago.source.remote.GetFetchListApi
-import com.cj3dreams.fetchchicago.source.remote.RemoteSource
 import com.cj3dreams.fetchchicago.source.remote.RemoteSourceImpl
 import com.cj3dreams.fetchchicago.utils.AppConstants.BASE_URL
+import com.cj3dreams.fetchchicago.vm.SortedLocalViewModel
 import com.cj3dreams.fetchchicago.vm.SortedRestViewModel
+import com.cj3dreams.fetchchicago.vm.UnsortedViewModel
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -31,11 +37,31 @@ val networkModule = module {
 
 val dataSourceModule = module {
 
-    fun provideDataRepository(api: GetFetchListApi) = DataRepositoryImpl(
-        RemoteSourceImpl(api))
+    fun provideDatabase(app: Application) =
+        Room.databaseBuilder(app,AppDb::class.java, "fetchDatabase")
+            .fallbackToDestructiveMigration()
+            .build()
 
-    single { provideDataRepository(get()) }
+    fun provideDao(database: AppDb) = database.fetchListDao()
+
+    fun provideDataRepository(api: GetFetchListApi, dao: FetchListDao) =
+        DataRepositoryImpl(RemoteSourceImpl(api), LocalSourceImpl(dao))
+
+    single { provideDatabase(androidApplication()) }
+    single { provideDao(get()) }
+    single { provideDataRepository(get(), get()) }
+
     viewModel {
         SortedRestViewModel(get())
+    }
+}
+val sortedLocalViewModel = module {
+    viewModel {
+        SortedLocalViewModel(get())
+    }
+}
+val unsortedViewModel = module {
+    viewModel {
+        UnsortedViewModel(get())
     }
 }

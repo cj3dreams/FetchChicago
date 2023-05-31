@@ -43,7 +43,7 @@ class SortedRestFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         super.onViewCreated(view, savedInstanceState)
 
         swipeToUpdateRest.setOnRefreshListener(this)
-        sortedRestViewModel.fetchListLiveData.observe(viewLifecycleOwner, {
+        sortedRestViewModel.fetchListLiveDataRemote.observe(viewLifecycleOwner, {
 
             when {
                 it == null -> {
@@ -62,5 +62,6 @@ class SortedRestFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     override fun onRefresh() {
         sortedRestViewModel.getFetchListFromRemoteAndSort()
         swipeToUpdateRest.isRefreshing = false
+        Toast.makeText(requireContext(), "Updating", Toast.LENGTH_SHORT).show()
     }
 }
