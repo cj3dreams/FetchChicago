@@ -18,11 +18,11 @@ MVVM + Clean Architecture + Usecases, Single Activity
 Koin, Coroutines, Retrofit, Room,
 Jetpack Navigation, Logging Interceptor (for tests).
 
-## The target of testing task was:
+## The target of testing task were:
 1. To get an array from the REST Api;
 2. Order that first of all by "listId" and only then by "name";
-3. Filter out any item, which includes null or blank data in column "name".
-4. Show as understandable list
+3. Filter out any item, which includes null or blank data in column "name";
+4. Show as understandable list.
 
 ## Extra things, which I added
 1. Additional sorting via SQLite + saving to see data offline.
